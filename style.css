@@ -1,0 +1,49 @@
+body {
+  background:#ddd;
+  font: 14px Arial;
+  width: 90%;
+  height: 95%;
+  margin: auto;
+  padding-top: 1%;
+}
+
+body, table {
+  font: 12px Arial;
+}
+
+#visualizations {
+  height: 90%;
+  padding:15px;
+  border-radius:3px;
+  box-shadow:-1px 1px 1px rgba(0,0,0,0.15);
+  background:#fff;
+}
+
+#summary {
+  width: 94%;
+  height: 20%;
+  background: blue;
+  margin: auto;
+}
+
+#map {
+  width: 43%;
+  height: 70%;
+  margin-top: 2%;
+  margin-left: 3%;
+  margin-right: 4%;
+  background: red;
+  display: inline;
+  float: left;
+}
+
+#polls {
+  width: 43%;
+  height: 70%;
+  margin-top: 2%;
+  margin-left: 4%;
+  margin-right: 3%;
+  background: green;
+  display: inline;
+  float: right;
+}
