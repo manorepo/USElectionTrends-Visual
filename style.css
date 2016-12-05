@@ -20,29 +20,29 @@ body, table {
 }
 
 #summary {
-  width: 94%;
+  width: 98%;
   height: 20%;
   background: blue;
   margin: auto;
 }
 
 #map {
-  width: 43%;
-  height: 70%;
+  width: 48%;
+  height: 71%;
   margin-top: 2%;
-  margin-left: 3%;
-  margin-right: 4%;
+  margin-left: 1%;
+  margin-right: 1%;
   background: red;
   display: inline;
   float: left;
 }
 
 #polls {
-  width: 43%;
-  height: 70%;
+  width: 48%;
+  height: 71%;
   margin-top: 2%;
-  margin-left: 4%;
-  margin-right: 3%;
+  margin-left: 1%;
+  margin-right: 1%;
   background: green;
   display: inline;
   float: right;
