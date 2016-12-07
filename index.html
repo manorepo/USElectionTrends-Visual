@@ -14,4 +14,36 @@
     <div id="map">map here</div>
     <div id="polls">polls here</div>
   </div>
+  <script>
+    var exitPollsData;
+    var categoriesDesc = [];
+    d3.json("ExitPolls.json", function (data) {
+      this.exitPollsData = data;
+      //Get the category descriptions which are existed in 2016 data.
+      data.data[11].results.forEach(function (d) {
+        if (d.web_title != "")
+          categoriesDesc[d.code] = d.web_title
+        else if (d.question != "")
+          categoriesDesc[d.code] = d.question
+        else if (d.code != "")
+          categoriesDesc[d.code] = d.code
+
+        d.exit_poll_subcategories.forEach(function (e) {
+          categoriesDesc[e.code] = e.answer
+
+        });
+      })
+
+      this.exitPollsData.data.forEach(function (d) {
+        d.results.forEach(function (res) {
+          res.desc = categoriesDesc[res.code];
+          res.exit_poll_subcategories.forEach(function (sub) {
+            sub.desc = categoriesDesc[sub.code]
+          });
+        });
+      });
+      console.log("exitPollsData");
+      console.log(exitPollsData);
+    });
+  </script>
 </body>
