@@ -45,5 +45,78 @@
       console.log("exitPollsData");
       console.log(exitPollsData);
     });
+    //
+    //
+    
+    //Map SVG
+    var dimen = 13;
+     var margin = {top: 20, right: 20, bottom: 80, left: 20},
+            width = $('#map').width() - margin.left - margin.right,
+            height = $('#map').height() - margin.top - margin.bottom
+
+    var svgContainer = d3.select("#map").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom) //height + margin.top + margin.bottom
+            .append("g")
+           // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    var x = d3.scale.linear()
+            .domain([0,730])
+            .range([0, width])
+
+    var y = d3.scale.linear()
+            .domain([0, 390])
+            .range([0, height]);
+
+    d3.json("states.json", function (data) {
+      console.log(data);
+      var rect = svgContainer.selectAll("rect")
+              .data(data)
+              .enter()
+              .append("rect")
+              .attr("fill", function (d) {
+                if (d.estimation_2012 == -2 || d.estimation_2012 == -1) {
+                  return "#B43030"
+                }
+                else
+                  return "#405695"
+              })
+              .attr("x", function (d) {
+                return x(d.x);
+              })
+              .attr("y", function (d) {
+                return y(d.y);
+              })
+              .attr("width", function (d) {
+                return Math.sqrt(d.noof_electrols) * dimen
+              })
+              .attr("height", function (d) {
+                return Math.sqrt(d.noof_electrols) * dimen
+              })
+              .text("hello");
+
+      var rect = svgContainer.selectAll(".statename")
+             .data(data)
+             .enter()
+             .append("text")
+             .attr("class", "statename")
+             .attr("x", function (d) {
+               return x(d.x)  + (Math.sqrt(d.noof_electrols) * dimen / 2)
+             })
+             .attr("y", function (d) {
+               return y(d.y)  + (Math.sqrt(d.noof_electrols) * dimen / 2)
+             })
+            .attr("text-anchor", "middle")
+            .style("font-size", function (d) {
+              return Math.max(Math.sqrt(d.noof_electrols) * 3, 8)
+            })
+        .style("fill", "#FFF")
+             .text(function (d) {
+               return d.postal.substring(0,2);
+             });
+
+       
+    });
+
+
   </script>
 </body>
