@@ -9,11 +9,22 @@
 <body>
   <h1>US Election Trends</h1>
   <div id="visualizations">
-    <div id="options">options here</div>
+    <div id="options">
+      <label>Year: </label>
+      <select onchange="yearChangeEvent(this)">
+        <option value="2012">2012</option>
+        <option value="2008">2008</option>
+        <option value="2004">2004</option>
+        <option value="2000">2000</option>
+        <option value="1996">1996</option>
+        <option value="1992">1992</option>
+      </select>
+    </div>
     <div id="summary">summary visualization here</div>
-    <div id="map">map here</div>
+    <div id="map"></div>
     <div id="polls">polls here</div>
   </div>
+  <script src="js/d3-tooltip.js"></script>
   <script>
     var exitPollsData;
     var categoriesDesc = [];
@@ -27,13 +38,11 @@
           categoriesDesc[d.code] = d.question
         else if (d.code != "")
           categoriesDesc[d.code] = d.code
-
         d.exit_poll_subcategories.forEach(function (e) {
           categoriesDesc[e.code] = e.answer
-
         });
       })
-
+      
       this.exitPollsData.data.forEach(function (d) {
         d.results.forEach(function (res) {
           res.desc = categoriesDesc[res.code];
@@ -46,77 +55,146 @@
       console.log(exitPollsData);
     });
     //
-    //
     
     //Map SVG
-    var dimen = 13;
-     var margin = {top: 20, right: 20, bottom: 80, left: 20},
-            width = $('#map').width() - margin.left - margin.right,
-            height = $('#map').height() - margin.top - margin.bottom
-
-    var svgContainer = d3.select("#map").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom) //height + margin.top + margin.bottom
-            .append("g")
-           // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+    /* Initialize tooltip */
+    var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function (d) {
+          //  console.log(d);
+          return "<strong>Democrates:" + "</strong><span>" + d.DemPer + "</span><br>" + "<strong>Republicans:" + "</strong><span>" + d.RepPer + "</span>";
+        });
+    var dimention = 11;
+    var margin = {top: 20, right: 20, bottom: 80, left: 20},
+        width = $('#map').width() - margin.left - margin.right,
+        height = $('#map').height() - margin.top - margin.bottom
+    
+    //Set dimention of map squares based on width
+    if (width > 750)
+      dimention = 17;
+    else
+      dimention = 11;
+    var mapsvgContainer = d3.select("#map").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+    mapsvgContainer.call(tip);
     var x = d3.scale.linear()
-            .domain([0,730])
-            .range([0, width])
-
+        .domain([0, 730])
+        .range([0, width])
+    
     var y = d3.scale.linear()
-            .domain([0, 390])
-            .range([0, height]);
-
-    d3.json("states.json", function (data) {
-      console.log(data);
-      var rect = svgContainer.selectAll("rect")
-              .data(data)
-              .enter()
-              .append("rect")
-              .attr("fill", function (d) {
-                if (d.estimation_2012 == -2 || d.estimation_2012 == -1) {
-                  return "#B43030"
-                }
-                else
-                  return "#405695"
-              })
-              .attr("x", function (d) {
-                return x(d.x);
-              })
-              .attr("y", function (d) {
-                return y(d.y);
-              })
-              .attr("width", function (d) {
-                return Math.sqrt(d.noof_electrols) * dimen
-              })
-              .attr("height", function (d) {
-                return Math.sqrt(d.noof_electrols) * dimen
-              })
-              .text("hello");
-
-      var rect = svgContainer.selectAll(".statename")
-             .data(data)
-             .enter()
-             .append("text")
-             .attr("class", "statename")
-             .attr("x", function (d) {
-               return x(d.x)  + (Math.sqrt(d.noof_electrols) * dimen / 2)
-             })
-             .attr("y", function (d) {
-               return y(d.y)  + (Math.sqrt(d.noof_electrols) * dimen / 2)
-             })
+        .domain([0, 390])
+        .range([0, height]);
+    var maprect;
+    var curr_Year_State_Result = [];
+    
+    //initially 2012 Election results
+    d3.csv("data/2012_Election.csv", function (result) {
+      result.forEach(function (stateRes) {
+        if (stateRes.STATE.includes("Dist. of Col"))
+          stateRes.STATE = "District of Columbia";
+        curr_Year_State_Result[stateRes.STATE] = stateRes;
+      });
+      d3.json("states.json", function (data) {
+        console.log(data);
+        maprect = mapsvgContainer.append("g");
+        maprect.selectAll("rect")
+            .data(data)
+            .enter()
+            .append("rect")
+            .attr("fill", function (d) {
+              return "#fff";
+            })
+            .attr("x", function (d) {
+              return x(d.x);
+            })
+            .attr("y", function (d) {
+              return y(d.y);
+            })
+            .attr("width", function (d) {
+              return Math.sqrt(d.noof_electrols) * dimention
+            })
+            .attr("height", function (d) {
+              return Math.sqrt(d.noof_electrols) * dimention
+            })
+            .on("mouseover", function (d, i) {
+              //mouse hover event
+              tip.show(d);
+            })
+            .on("mouseout", function (d, i) {
+              tip.hide();
+              
+            })
+            .on("click", function (d, i) {
+              //click event
+              
+            })
+        var mapStateNames = mapsvgContainer.selectAll(".statename")
+            .data(data)
+            .enter()
+            .append("text")
+            .attr("class", "statename")
+            .attr("x", function (d) {
+              return x(d.x) + (Math.sqrt(d.noof_electrols) * dimention / 2)
+            })
+            .attr("y", function (d) {
+              return y(d.y) + (Math.sqrt(d.noof_electrols) * dimention / 2)
+            })
             .attr("text-anchor", "middle")
             .style("font-size", function (d) {
               return Math.max(Math.sqrt(d.noof_electrols) * 3, 8)
             })
-        .style("fill", "#FFF")
-             .text(function (d) {
-               return d.postal.substring(0,2);
-             });
-
-       
-    });
-
-
+            .style("fill", "#FFF")
+            .text(function (d) {
+              return d.postal.substring(0, 2);
+            });
+        
+        maprect.selectAll("rect")
+            .transition()
+            .attr("fill", function (d) {
+              var stateres = curr_Year_State_Result[d.state_name];
+              d.DemPer = stateres.DemPer;
+              d.RepPer = stateres.RepPer;
+              
+              if (stateres.RepEV != "") {
+                return "#B43030"
+              }
+              else
+                return "#405695"
+              
+            });
+      });
+      console.log(curr_Year_State_Result);
+      
+    })
+    
+    function changeYear_UpdateMap(Year) {
+      d3.csv("data/" + Year + "_Election.csv", function (result) {
+        result.forEach(function (stateRes) {
+          if (stateRes.STATE.includes("Dist. of Col"))
+            stateRes.STATE = "District of Columbia";
+          curr_Year_State_Result[stateRes.STATE] = stateRes;
+        });
+        maprect.selectAll("rect")
+            .transition()
+            .attr("fill", function (d) {
+              var stateres = curr_Year_State_Result[d.state_name];
+              if (stateres.RepEV != "") {
+                return "#B43030"
+              }
+              else
+                return "#405695"
+              
+            });
+      });
+    }
+    //function to trigger events on Year Change
+    function yearChangeEvent(element) {
+      var year = element.options[element.selectedIndex].value;
+      changeYear_UpdateMap(year);
+    }
   </script>
 </body>
