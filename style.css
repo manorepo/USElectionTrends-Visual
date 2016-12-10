@@ -1,5 +1,5 @@
 body {
-  background:#ddd;
+  background: #ddd;
   font: 14px Arial;
   width: 90%;
   height: 95%;
@@ -13,10 +13,10 @@ body, table {
 
 #visualizations {
   height: 90%;
-  padding:15px;
-  border-radius:3px;
-  box-shadow:-1px 1px 1px rgba(0,0,0,0.15);
-  background:#fff;
+  padding: 15px;
+  border-radius: 3px;
+  box-shadow: -1px 1px 1px rgba(0, 0, 0, 0.15);
+  background: #fff;
 }
 
 #summary {
@@ -32,7 +32,6 @@ body, table {
   margin-top: 2%;
   margin-left: 1%;
   margin-right: 1%;
-  background: red;
   display: inline;
   float: left;
 }
@@ -46,4 +45,33 @@ body, table {
   background: green;
   display: inline;
   float: right;
+}
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
 }
