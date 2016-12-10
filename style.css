@@ -42,9 +42,9 @@ body, table {
   margin-top: 2%;
   margin-left: 1%;
   margin-right: 1%;
-  background: green;
   display: inline;
   float: right;
+  overflow: scroll;
 }
 
 .d3-tip {
