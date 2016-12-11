@@ -174,10 +174,15 @@
         });
       
       function updateSummary(year) {
+        var repVotes = data[year].repTotalEv;
+        var demVotes = data[year].demTotalEv;
+        
+        var checkmarkChar = unescape("%u2713");
+        
         d3.select("#demName")
-          .text(data[year].demCandidate);
+          .text(data[year].demCandidate + " " + ((data[year].demTotalEv >= 270) ? checkmarkChar : ""));
         d3.select("#repName")
-          .text(data[year].repCandidate);
+          .text(data[year].repCandidate + " " + ((data[year].repTotalEv >= 270) ? checkmarkChar : ""));
         
         d3.select("#demPortionText")
           .text(data[year].demTotalEv);
