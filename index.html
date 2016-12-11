@@ -68,155 +68,155 @@
     
     // SVG that holds all the yearly summary info.
     var summarySvg = d3.select("#summarySvg")
-      .attr("height", svgHeight)
-      .attr("width", svgWidth)
-      .append("g")
-      .attr("transform", "translate(" + summaryMargin.left + "," + summaryMargin.top + ")");
+        .attr("height", svgHeight)
+        .attr("width", svgWidth)
+        .append("g")
+        .attr("transform", "translate(" + summaryMargin.left + "," + summaryMargin.top + ")");
     
     // Names of the presidential candidates for a given year.
     summarySvg.append("text")
-      .attr("id", "demName")
-      .attr("y", candidateNameY)
-      .style("font", "20px Arial");
+        .attr("id", "demName")
+        .attr("y", candidateNameY)
+        .style("font", "20px Arial");
     
     summarySvg.append("text")
-      .attr("id", "repName")
-      .attr("text-anchor", "end")
-      .attr("x", w)
-      .attr("y", candidateNameY)
-      .style("font", "20px Arial");
+        .attr("id", "repName")
+        .attr("text-anchor", "end")
+        .attr("x", w)
+        .attr("y", candidateNameY)
+        .style("font", "20px Arial");
     
     // Elements that visualize the vote percentage as bars.
     var votePortionBar = summarySvg.append("g")
-      .attr("transform", "translate(0," + portionBarY + ")");
+        .attr("transform", "translate(0," + portionBarY + ")");
     
     // Rect that surrounds portion bars.
     votePortionBar.append("rect")
-      .attr("width", w)
-      .attr("height", portionBarHeight)
-      .style("fill", "white")
-      .style("stroke", "black");
+        .attr("width", w)
+        .attr("height", portionBarHeight)
+        .style("fill", "white")
+        .style("stroke", "black");
     
     // Candidate vote bars.
     votePortionBar.append("rect")
-      .attr("id", "demPortionRect")
-      .attr("width", w/2)
-      .attr("height", portionBarHeight)
-      .style("fill", "blue");
+        .attr("id", "demPortionRect")
+        .attr("width", w / 2)
+        .attr("height", portionBarHeight)
+        .style("fill", "blue");
     
     votePortionBar.append("rect")
-      .attr("id", "repPortionRect")
-      .attr("width", w/2)
-      .attr("height", portionBarHeight)
-      .attr("x", w/2)
-      .style("fill", "red");
+        .attr("id", "repPortionRect")
+        .attr("width", w / 2)
+        .attr("height", portionBarHeight)
+        .attr("x", w / 2)
+        .style("fill", "red");
     
     // Candidate vote count text.
     votePortionBar.append("text")
-      .attr("id", "demPortionText")
-      .attr("x", 5)
-      .attr("y", portionBarHeight/2 + 10)
-      .style("font", "20px Arial")
-      .style("fill", "white");
+        .attr("id", "demPortionText")
+        .attr("x", 5)
+        .attr("y", portionBarHeight / 2 + 10)
+        .style("font", "20px Arial")
+        .style("fill", "white");
     
     votePortionBar.append("text")
-      .attr("id", "repPortionText")
-      .attr("y", portionBarHeight/2 + 10)
-      .attr("x", w - 5)
-      .attr("text-anchor", "end")
-      .style("font", "20px Arial")
-      .style("fill", "white");
+        .attr("id", "repPortionText")
+        .attr("y", portionBarHeight / 2 + 10)
+        .attr("x", w - 5)
+        .attr("text-anchor", "end")
+        .style("font", "20px Arial")
+        .style("fill", "white");
     
     // Majority line.
     votePortionBar.append("line")
-      .attr("x1", w/2)
-      .attr("x2", w/2)
-      .attr("y1", -10)
-      .attr("y2", portionBarHeight + 10)
-      .style("stroke", "#888")
-      .style("stroke-width", 2);
+        .attr("x1", w / 2)
+        .attr("x2", w / 2)
+        .attr("y1", -10)
+        .attr("y2", portionBarHeight + 10)
+        .style("stroke", "#888")
+        .style("stroke-width", 2);
     
     votePortionBar.append("text")
-      .attr("x", w/2)
-      .attr("y", portionBarHeight + 25)
-      .attr("text-anchor", "middle")
-      .style("font", "15px Arial")
-      .text("270");
+        .attr("x", w / 2)
+        .attr("y", portionBarHeight + 25)
+        .attr("text-anchor", "middle")
+        .style("font", "15px Arial")
+        .text("270");
     
     votePortionBar.append("text")
-      .attr("id", "voteSpread")
-      .attr("x", w/2)
-      .attr("y", -12)
-      .attr("text-anchor", "middle")
-      .style("font", "15px Arial")
-      .text("spread");
+        .attr("id", "voteSpread")
+        .attr("x", w / 2)
+        .attr("y", -12)
+        .attr("text-anchor", "middle")
+        .style("font", "15px Arial")
+        .text("spread");
     
     var voteCountText = summarySvg.append("g")
-      .attr("transform", "translate(0," + (portionBarHeight + portionBarY) + ")");
+        .attr("transform", "translate(0," + (portionBarHeight + portionBarY) + ")");
     
     voteCountText.append("text")
-      .attr("id", "demVoteCount")
-      .attr("y", 15)
-      .style("font", "15px Arial");
+        .attr("id", "demVoteCount")
+        .attr("y", 15)
+        .style("font", "15px Arial");
     
     voteCountText.append("text")
-      .attr("id", "repVoteCount")
-      .attr("x", w)
-      .attr("y", 15)
-      .attr("text-anchor", "end")
-      .style("font", "15px Arial");
+        .attr("id", "repVoteCount")
+        .attr("x", w)
+        .attr("y", 15)
+        .attr("text-anchor", "end")
+        .style("font", "15px Arial");
     
     var resultsData;
-    d3.json("data/finalResults.json", function(data) {
+    d3.json("data/finalResults.json", function (data) {
       resultsData = data;
       updateSummary(2012);
     });
-      
+    
     function updateSummary(year) {
       var repVotes = resultsData[year].repTotalEv;
       var demVotes = resultsData[year].demTotalEv;
-
+      
       var checkmarkChar = unescape("%u2713");
-
+      
       d3.select("#demName")
-        .text(resultsData[year].demCandidate + " " + ((resultsData[year].demTotalEv >= 270) ? checkmarkChar : ""));
+          .text(resultsData[year].demCandidate + " " + ((resultsData[year].demTotalEv >= 270) ? checkmarkChar : ""));
       d3.select("#repName")
-        .text(resultsData[year].repCandidate + " " + ((resultsData[year].repTotalEv >= 270) ? checkmarkChar : ""));
-
+          .text(resultsData[year].repCandidate + " " + ((resultsData[year].repTotalEv >= 270) ? checkmarkChar : ""));
+      
       d3.select("#demPortionText")
-        .text(resultsData[year].demTotalEv);
+          .text(resultsData[year].demTotalEv);
       d3.select("#repPortionText")
-        .text(resultsData[year].repTotalEv);
-
+          .text(resultsData[year].repTotalEv);
+      
       d3.select("#demVoteCount")
-        .text(resultsData[year].demTotalVotes + " votes (" + resultsData[year].demTotalPer + ")");
-
+          .text(resultsData[year].demTotalVotes + " votes (" + resultsData[year].demTotalPer + ")");
+      
       d3.select("#repVoteCount")
-        .text(resultsData[year].repTotalVotes + " votes (" + resultsData[year].repTotalPer + ")");
-
+          .text(resultsData[year].repTotalVotes + " votes (" + resultsData[year].repTotalPer + ")");
+      
       var repVotes = resultsData[year].repTotalEv;
       var demVotes = resultsData[year].demTotalEv;
-
+      
       d3.select("#demPortionRect")
-        .transition()
-        .attr("width", portionScale(demVotes));
-
+          .transition()
+          .attr("width", portionScale(demVotes));
+      
       d3.select("#repPortionRect")
-        .transition()
-        .attr("x", w - portionScale(repVotes))
-        .attr("width", portionScale(repVotes));
-
+          .transition()
+          .attr("x", w - portionScale(repVotes))
+          .attr("width", portionScale(repVotes));
+      
       d3.select("#voteSpread")
-        .text("+" + Math.abs(repVotes - demVotes))
-        .attr("fill", function() {
-          if (repVotes > demVotes) {
-            return "red";
-          } else if (demVotes > repVotes) {
-            return "blue";
-          } else {
-            return "black";
-          }
-        });
+          .text("+" + Math.abs(repVotes - demVotes))
+          .attr("fill", function () {
+            if (repVotes > demVotes) {
+              return "red";
+            } else if (demVotes > repVotes) {
+              return "blue";
+            } else {
+              return "black";
+            }
+          });
     }
     
     var exitPollsData;
@@ -254,10 +254,9 @@
     /* Initialize tooltip */
     var tip = d3.tip()
         .attr('class', 'd3-tip')
-        .offset([-10, 0])
+        .offset([0, 0])
         .html(function (d) {
-          //  console.log(d);
-          return "<strong>Democrates:" + "</strong><span>" + d.DemPer + "</span><br>" + "<strong>Republicans:" + "</strong><span>" + d.RepPer + "</span>";
+          return getToolTip(d);
         });
     var dimention = 11;
     var margin = {top: 20, right: 20, bottom: 80, left: 20},
@@ -352,6 +351,10 @@
               var stateres = curr_Year_State_Result[d.state_name];
               d.DemPer = stateres.DemPer;
               d.RepPer = stateres.RepPer;
+              d.DemVotes = stateres.DemVotes;
+              d.RepVotes = stateres.RepVotes;
+              d.demCandidate = resultsData[2012].demCandidate;
+              d.repCandidate = resultsData[2012].repCandidate;
               
               if (stateres.RepEV != "") {
                 return "#B43030"
@@ -376,6 +379,12 @@
             .transition()
             .attr("fill", function (d) {
               var stateres = curr_Year_State_Result[d.state_name];
+              d.DemPer = stateres.DemPer;
+              d.RepPer = stateres.RepPer;
+              d.DemVotes = stateres.DemVotes;
+              d.RepVotes = stateres.RepVotes;
+              d.demCandidate = resultsData[Year].demCandidate;
+              d.repCandidate = resultsData[Year].repCandidate;
               if (stateres.RepEV != "") {
                 return "#B43030"
               }
@@ -662,6 +671,46 @@
       for (var i = 0; i < 40; i++) {
         persons += "<i class='material-icons'>person_outline</i>";
       }
+    }
+    function getToolTip(d) {
+      var checkmarkChar = unescape("%u2713");
+      var demName;
+      var repName;
+      if (d.DemVotes > d.RepVotes) {
+        demName = checkmarkChar + " " + d.demCandidate;
+        repName = d.repCandidate;
+      }
+      else {
+        demName = d.demCandidate;
+        repName = checkmarkChar + " " + d.repCandidate;
+      }
+      return "<div id='tooltip-results' class='statetooltip' style='display:block'>\
+      <div class='county-name'>\
+          " + d.state_name + "<span class='tooltip-electoral'> (" + d.electrol + " electoral votes) </span>\
+      </div>\
+      <div id='tooltip-president' class='summary'>\
+      <table class='table'>\
+      <tbody><tr>\
+      <th></th>\
+      <th data-i18n='tooltip.percent'>PERCENT</th>\
+      <th data-i18n='tooltip.votes'>VOTES</th>\
+      </tr>\
+      <tr data-partyclass='Dem'>\
+      <td class='res-cand-name'>" + demName + "\
+      </td>\
+      <td class='vote-percent active-winner'><span class='Dem'>" + d.DemPer + "</span></td>\
+      <td class='vote-count'>" + d.DemVotes + "</td>\
+      </tr>\
+      <tr data-partyclass='GOP'>\
+      <td class='res-cand-name'>\
+          " + repName + "\
+      </td>\
+      <td class='vote-percent inactive-winner'><span class='GOP'>" + d.RepPer + "</span></td>\
+      <td class='vote-count'>" + d.RepVotes + "</td>\
+      </tr>\
+      </tbody></table>\
+      </div>\
+      </div>"
     }
   
   </script>

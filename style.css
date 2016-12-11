@@ -52,9 +52,7 @@ body, table {
 .d3-tip {
   line-height: 1;
   font-weight: bold;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
+  padding: 2px;
   border-radius: 2px;
 }
 
@@ -131,8 +129,50 @@ li.active a, li.active a:hover {
   display: block;
 }
 
-#ExitPolls{
-  width:90%;
-  margin:auto;
+#ExitPolls {
+  width: 90%;
+  margin: auto;
+}
+.statetooltip {
+  padding: 2px;
+  max-width: 300px;
+  display: none;
+  z-index: 10;
+  background: white;
+  cursor: pointer;
+  opacity: 1;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-box-shadow: 0 0 2px #666;
+  -moz-box-shadow: 0 0 2px #666;
+  box-shadow: 0 0 2px #666;
+  overflow: hidden;
+  text-align: left;
+}
+.statetooltip table {
+  width: 96%;
+}
+
+.statetooltip table td.res-cand-name {
+  min-width: 120px;
+  font-weight: bold;
+}
+
+.statetooltip table td.vote-count {
+  min-width: 70px;
+}
+
+.GOP {
+  background-color: #C43D49;
+  border: 1px solid #C43D49;
+  color: #fff;
+}
+
+.Dem {
+  background-color: #5186B4;
+  border: 1px solid #5186B4;
+  color: #fff;
 }
 
