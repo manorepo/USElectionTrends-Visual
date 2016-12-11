@@ -22,7 +22,8 @@ body, table {
 #summary {
   width: 98%;
   height: 20%;
-  background: blue;
+  border-style: solid;
+  border-color: #AAA;
   margin: auto;
 }
 
