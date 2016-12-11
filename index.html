@@ -62,7 +62,8 @@
     var w = svgWidth - margin.left - margin.right;
     var h = svgHeight - margin.bottom - margin.top;
     
-    var portionScale = d3.scale.linear().domain([0, 270]).range([0, w]);
+    // Scale for electoral votes to vote bar (538 electoral votes total).
+    var portionScale = d3.scale.linear().domain([0, 538]).range([0, w]);
     
     // SVG that holds all the yearly summary info.
     var summarySvg = d3.select("#summarySvg")
@@ -185,6 +186,15 @@
         
         d3.select("#repVoteCount")
           .text(data[year].repTotalVotes + " votes (" + data[year].repTotalPer + ")");
+        
+        d3.select("#demPortionRect")
+          .transition()
+          .attr("width", portionScale(data[year].demTotalEv));
+        
+        d3.select("#repPortionRect")
+          .transition()
+          .attr("x", w - portionScale(data[year].repTotalEv))
+          .attr("width", portionScale(data[year].repTotalEv));
       }
     });
     
