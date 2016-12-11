@@ -165,61 +165,58 @@
       .attr("text-anchor", "end")
       .style("font", "15px Arial");
     
+    var resultsData;
     d3.json("data/finalResults.json", function(data) {
+      resultsData = data;
       updateSummary(2012);
-      
-      d3.select("#yearSelect")
-        .on("change", function() {
-          updateSummary(this.value);
-        });
-      
-      function updateSummary(year) {
-        var repVotes = data[year].repTotalEv;
-        var demVotes = data[year].demTotalEv;
-        
-        var checkmarkChar = unescape("%u2713");
-        
-        d3.select("#demName")
-          .text(data[year].demCandidate + " " + ((data[year].demTotalEv >= 270) ? checkmarkChar : ""));
-        d3.select("#repName")
-          .text(data[year].repCandidate + " " + ((data[year].repTotalEv >= 270) ? checkmarkChar : ""));
-        
-        d3.select("#demPortionText")
-          .text(data[year].demTotalEv);
-        d3.select("#repPortionText")
-          .text(data[year].repTotalEv);
-        
-        d3.select("#demVoteCount")
-          .text(data[year].demTotalVotes + " votes (" + data[year].demTotalPer + ")");
-        
-        d3.select("#repVoteCount")
-          .text(data[year].repTotalVotes + " votes (" + data[year].repTotalPer + ")");
-        
-        var repVotes = data[year].repTotalEv;
-        var demVotes = data[year].demTotalEv;
-        
-        d3.select("#demPortionRect")
-          .transition()
-          .attr("width", portionScale(demVotes));
-        
-        d3.select("#repPortionRect")
-          .transition()
-          .attr("x", w - portionScale(repVotes))
-          .attr("width", portionScale(repVotes));
-        
-        d3.select("#voteSpread")
-          .text("+" + Math.abs(repVotes - demVotes))
-          .attr("fill", function() {
-            if (repVotes > demVotes) {
-              return "red";
-            } else if (demVotes > repVotes) {
-              return "blue";
-            } else {
-              return "black";
-            }
-          });
-      }
     });
+      
+    function updateSummary(year) {
+      var repVotes = resultsData[year].repTotalEv;
+      var demVotes = resultsData[year].demTotalEv;
+
+      var checkmarkChar = unescape("%u2713");
+
+      d3.select("#demName")
+        .text(resultsData[year].demCandidate + " " + ((resultsData[year].demTotalEv >= 270) ? checkmarkChar : ""));
+      d3.select("#repName")
+        .text(resultsData[year].repCandidate + " " + ((resultsData[year].repTotalEv >= 270) ? checkmarkChar : ""));
+
+      d3.select("#demPortionText")
+        .text(resultsData[year].demTotalEv);
+      d3.select("#repPortionText")
+        .text(resultsData[year].repTotalEv);
+
+      d3.select("#demVoteCount")
+        .text(resultsData[year].demTotalVotes + " votes (" + resultsData[year].demTotalPer + ")");
+
+      d3.select("#repVoteCount")
+        .text(resultsData[year].repTotalVotes + " votes (" + resultsData[year].repTotalPer + ")");
+
+      var repVotes = resultsData[year].repTotalEv;
+      var demVotes = resultsData[year].demTotalEv;
+
+      d3.select("#demPortionRect")
+        .transition()
+        .attr("width", portionScale(demVotes));
+
+      d3.select("#repPortionRect")
+        .transition()
+        .attr("x", w - portionScale(repVotes))
+        .attr("width", portionScale(repVotes));
+
+      d3.select("#voteSpread")
+        .text("+" + Math.abs(repVotes - demVotes))
+        .attr("fill", function() {
+          if (repVotes > demVotes) {
+            return "red";
+          } else if (demVotes > repVotes) {
+            return "blue";
+          } else {
+            return "black";
+          }
+        });
+    }
     
     var exitPollsData;
     var categoriesDesc = [];
@@ -389,6 +386,7 @@
     //function to trigger events on Year Change
     function yearChangeEvent(element) {
       var year = element.options[element.selectedIndex].value;
+      updateSummary(year);
       changeYear_UpdateMap(year);
     }
     
