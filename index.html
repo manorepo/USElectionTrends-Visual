@@ -13,7 +13,7 @@
   <div id="visualizations">
     <div id="options">
       <label>Year: </label>
-      <select onchange="yearChangeEvent(this)">
+      <select id="yearSelect" onchange="yearChangeEvent(this)">
         <option value="2012">2012</option>
         <option value="2008">2008</option>
         <option value="2004">2004</option>
@@ -61,6 +61,8 @@
     var svgWidth = $("#summary").width();
     var w = svgWidth - margin.left - margin.right;
     var h = svgHeight - margin.bottom - margin.top;
+    
+    var portionScale = d3.scale.linear().domain([0, 270]).range([0, w]);
     
     // SVG that holds all the yearly summary info.
     var summarySvg = d3.select("#summarySvg")
@@ -159,6 +161,32 @@
       .style("font", "15px Arial")
       .text("XXX,XXX,XXX votes (XX.XX%)");
     
+    d3.json("data/finalResults.json", function(data) {
+      updateSummary(2012);
+      
+      d3.select("#yearSelect")
+        .on("change", function() {
+          updateSummary(this.value);
+        });
+      
+      function updateSummary(year) {
+        d3.select("#demName")
+          .text(data[year].demCandidate);
+        d3.select("#repName")
+          .text(data[year].repCandidate);
+        
+        d3.select("#demPortionText")
+          .text(data[year].demTotalEv);
+        d3.select("#repPortionText")
+          .text(data[year].repTotalEv);
+        
+        d3.select("#demVoteCount")
+          .text(data[year].demTotalVotes + " votes (" + data[year].demTotalPer + ")");
+        
+        d3.select("#repVoteCount")
+          .text(data[year].repTotalVotes + " votes (" + data[year].repTotalPer + ")");
+      }
+    });
     
     var exitPollsData;
     var categoriesDesc = [];
