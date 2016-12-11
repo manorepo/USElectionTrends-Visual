@@ -6,6 +6,7 @@
   <script src="lib/nv.d3.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="exitpolls.css">
   <title>US Election Trends</title>
 </head>
 <body>
@@ -78,6 +79,7 @@
       });
       console.log("exitPollsData");
       console.log(exitPollsData);
+      plotPolls("2012");
     });
     //
     
@@ -220,6 +222,7 @@
     function yearChangeEvent(element) {
       var year = element.options[element.selectedIndex].value;
       changeYear_UpdateMap(year);
+      plotPolls(year);
     }
     
     function plotTrends(state, url) {
@@ -400,6 +403,97 @@
         
       }
       return url;
+    }
+    //
+    //Exit poll data
+    function plotPolls(year) {
+      var yearindex = ((2016 - year) / 4);
+      var currYear = exitPollsData.data[yearindex];
+      
+      var categ = d3.select('#ExitPolls').selectAll('.poll-section')
+          .data(currYear.results, function (d, i) {
+                return d.code;
+              }
+          );
+      
+      categ.enter()
+          .append('div')
+          .attr('class', 'poll-section clearfix poll-inactive')
+          .html(function (d) {
+            
+            return "<h4 class='heading'>" + d.desc + "<span></span></h4>"
+            
+          })
+      categ.exit().remove();
+      var subcat = categ.selectAll('.poll-g')
+          .data(
+              function (d, i) {
+                return d.exit_poll_subcategories;
+              }, // grabs data inside a category
+              function (d, i) {
+                return d.code;
+              } // gives it a key
+          );
+      
+      subcat.enter()
+          .append('div')
+          .attr('class', 'poll-g')
+          .html(function (d) {
+            return '<div class="subheading">' + d.desc + '</div>\
+					<div class="statusDiv">\
+						<div class="scalerDiv">\
+							<div class="poll-bar otherDiv"><span></span></div>\
+							<div class="poll-bar demDiv"><span class="ep-aniLabel">NA%</span></div>\
+							<div class="poll-bar repDiv"><span class="ep-aniLabel">NA%</span></div>\
+						</div>\
+					</div>\
+					'
+            
+          });
+      subcat.exit().remove();
+      subcat.classed('poll-active', function (d) {
+        return d.candidates.dem && d.candidates.rep
+      });
+      subcat.select('.demDiv')
+          .each(function (d, i) {
+            var $this = $(this);
+            //    $this.stop(true, true).delay(40 * i).queue(function (next) {
+            $this.css('width', Number(d.candidates.dem) + '%');
+            //     next();
+            //  });
+          })
+          .select('span').text(function (d) {
+        return d.candidates.dem + '%'
+      });
+      subcat.select('.repDiv')
+          .each(function (d, i) {
+            var $this = $(this);
+            //   $this.stop(true, true).delay(40 * i).queue(function (next) {
+            $this.css('width', Number(d.candidates.rep) + '%');
+            //    next();
+            // });
+          })
+          .select('span').text(function (d) {
+        return d.candidates.rep + '%'
+      });
+      subcat.select('.otherDiv')
+          .each(function (d, i) {
+            var $this = $(this);
+            //   $this.stop(true, true).delay(40 * i).queue(function (next) {
+            $this.css('width', 100 - Number(d.candidates.dem) - Number(d.candidates.rep) + '%');
+            $this.css('left', Number(d.candidates.dem) + '%');
+            //    next();
+            // });
+          })
+      
+      $('.poll-section').each(function () {
+        var $this = $(this);
+        $this.toggleClass('poll-inactive', !$this.find('.poll-active').length);
+      });
+      var persons = "<i class='material-icons'>person_outline</i>";
+      for (var i = 0; i < 40; i++) {
+        persons += "<i class='material-icons'>person_outline</i>";
+      }
     }
   
   </script>

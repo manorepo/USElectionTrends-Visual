@@ -44,7 +44,7 @@ body, table {
   margin-right: 1%;
   display: inline;
   float: right;
-  background: #ddd;
+
   overflow: scroll;
 }
 
@@ -128,5 +128,10 @@ li.active a, li.active a:hover {
 
 .tab.active {
   display: block;
+}
+
+#ExitPolls{
+  width:90%;
+  margin:auto;
 }
 
