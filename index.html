@@ -385,7 +385,7 @@
     }
     //function to trigger events on Year Change
     function yearChangeEvent(element) {
-      var year = element.options[element.selectedIndex].value;
+      var year = element.value;
       updateSummary(year);
       changeYear_UpdateMap(year);
     }
