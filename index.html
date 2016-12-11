@@ -22,7 +22,9 @@
         <option value="1992">1992</option>
       </select>
     </div>
-    <div id="summary">summary visualization here</div>
+    <div id="summary">
+      <svg id="summarySvg"></svg>
+    </div>
     <div id="map"></div>
     <div class="tabs">
       <ul class="tab-links">
@@ -51,6 +53,113 @@
   </script>
   <script src="js/d3-tooltip.js"></script>
   <script>
+    var margin = {top: 10, right: 20, bottom: 0, left: 20};
+    var candidateNameY = 20;
+    var portionBarHeight = 50;
+    var portionBarY = candidateNameY + 5;
+    var svgHeight = $("#summary").height();
+    var svgWidth = $("#summary").width();
+    var w = svgWidth - margin.left - margin.right;
+    var h = svgHeight - margin.bottom - margin.top;
+    
+    // SVG that holds all the yearly summary info.
+    var summarySvg = d3.select("#summarySvg")
+      .attr("height", svgHeight)
+      .attr("width", svgWidth)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+    // Names of the presidential candidates for a given year.
+    summarySvg.append("text")
+      .attr("id", "demName")
+      .attr("y", candidateNameY)
+      .style("font", "20px Arial")
+      .text("Dem Cand Name");
+    
+    summarySvg.append("text")
+      .attr("id", "repName")
+      .attr("text-anchor", "end")
+      .attr("x", w)
+      .attr("y", candidateNameY)
+      .style("font", "20px Arial")
+      .text("Rep Cand Name");
+    
+    // Elements that visualize the vote percentage as bars.
+    var votePortionBar = summarySvg.append("g")
+      .attr("transform", "translate(0," + portionBarY + ")");
+    
+    // Rect that surrounds portion bars.
+    votePortionBar.append("rect")
+      .attr("width", w)
+      .attr("height", portionBarHeight)
+      .style("fill", "white")
+      .style("stroke", "black");
+    
+    // Candidate vote bars.
+    votePortionBar.append("rect")
+      .attr("id", "demPortionRect")
+      .attr("width", "200")
+      .attr("height", portionBarHeight)
+      .style("fill", "blue");
+    
+    votePortionBar.append("rect")
+      .attr("id", "repPortionRect")
+      .attr("width", "831")
+      .attr("height", portionBarHeight)
+      .attr("x", "200")
+      .style("fill", "red");
+    
+    // Candidate vote count text.
+    votePortionBar.append("text")
+      .attr("id", "demPortionText")
+      .attr("y", portionBarHeight/2 + 10)
+      .style("font", "20px Arial")
+      .text("Dem Votes")
+      .style("fill", "white");
+    
+    votePortionBar.append("text")
+      .attr("id", "repPortionText")
+      .attr("y", portionBarHeight/2 + 10)
+      .attr("x", w)
+      .attr("text-anchor", "end")
+      .style("font", "20px Arial")
+      .text("Rep Votes")
+      .style("fill", "white");
+    
+    // Majority line.
+    votePortionBar.append("line")
+      .attr("x1", w/2)
+      .attr("x2", w/2)
+      .attr("y1", -10)
+      .attr("y2", portionBarHeight + 10)
+      .style("stroke", "#888")
+      .style("stroke-width", 2);
+    
+    votePortionBar.append("text")
+      .attr("x", w/2)
+      .attr("y", portionBarHeight + 25)
+      .attr("text-anchor", "middle")
+      .style("font", "15px Arial")
+      .text("270");
+    
+    var voteCountText = summarySvg.append("g")
+      .attr("transform", "translate(0," + (portionBarHeight + portionBarY) + ")");
+    
+    voteCountText.append("text")
+      .attr("id", "demVoteCount")
+      .attr("y", 15)
+      .style("font", "15px Arial")
+      .text("XXX,XXX,XXX votes (XX.XX%)");
+    
+    voteCountText.append("text")
+      .attr("id", "repVoteCount")
+      .attr("x", w)
+      .attr("y", 15)
+      .attr("text-anchor", "end")
+      .style("font", "15px Arial")
+      .text("XXX,XXX,XXX votes (XX.XX%)");
+    
+    
     var exitPollsData;
     var categoriesDesc = [];
     d3.json("ExitPolls.json", function (data) {
