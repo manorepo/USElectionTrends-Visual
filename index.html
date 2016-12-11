@@ -56,7 +56,7 @@
     var margin = {top: 10, right: 20, bottom: 0, left: 20};
     var candidateNameY = 20;
     var portionBarHeight = 50;
-    var portionBarY = candidateNameY + 5;
+    var portionBarY = candidateNameY + 10;
     var svgHeight = $("#summary").height();
     var svgWidth = $("#summary").width();
     var w = svgWidth - margin.left - margin.right;
@@ -76,16 +76,14 @@
     summarySvg.append("text")
       .attr("id", "demName")
       .attr("y", candidateNameY)
-      .style("font", "20px Arial")
-      .text("Dem Cand Name");
+      .style("font", "20px Arial");
     
     summarySvg.append("text")
       .attr("id", "repName")
       .attr("text-anchor", "end")
       .attr("x", w)
       .attr("y", candidateNameY)
-      .style("font", "20px Arial")
-      .text("Rep Cand Name");
+      .style("font", "20px Arial");
     
     // Elements that visualize the vote percentage as bars.
     var votePortionBar = summarySvg.append("g")
@@ -101,32 +99,31 @@
     // Candidate vote bars.
     votePortionBar.append("rect")
       .attr("id", "demPortionRect")
-      .attr("width", "200")
+      .attr("width", w/2)
       .attr("height", portionBarHeight)
       .style("fill", "blue");
     
     votePortionBar.append("rect")
       .attr("id", "repPortionRect")
-      .attr("width", "831")
+      .attr("width", w/2)
       .attr("height", portionBarHeight)
-      .attr("x", "200")
+      .attr("x", w/2)
       .style("fill", "red");
     
     // Candidate vote count text.
     votePortionBar.append("text")
       .attr("id", "demPortionText")
+      .attr("x", 5)
       .attr("y", portionBarHeight/2 + 10)
       .style("font", "20px Arial")
-      .text("Dem Votes")
       .style("fill", "white");
     
     votePortionBar.append("text")
       .attr("id", "repPortionText")
       .attr("y", portionBarHeight/2 + 10)
-      .attr("x", w)
+      .attr("x", w - 5)
       .attr("text-anchor", "end")
       .style("font", "20px Arial")
-      .text("Rep Votes")
       .style("fill", "white");
     
     // Majority line.
@@ -151,16 +148,14 @@
     voteCountText.append("text")
       .attr("id", "demVoteCount")
       .attr("y", 15)
-      .style("font", "15px Arial")
-      .text("XXX,XXX,XXX votes (XX.XX%)");
+      .style("font", "15px Arial");
     
     voteCountText.append("text")
       .attr("id", "repVoteCount")
       .attr("x", w)
       .attr("y", 15)
       .attr("text-anchor", "end")
-      .style("font", "15px Arial")
-      .text("XXX,XXX,XXX votes (XX.XX%)");
+      .style("font", "15px Arial");
     
     d3.json("data/finalResults.json", function(data) {
       updateSummary(2012);
