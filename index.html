@@ -24,8 +24,31 @@
     </div>
     <div id="summary">summary visualization here</div>
     <div id="map"></div>
-    <div id="polls"></div>
+    <div class="tabs">
+      <ul class="tab-links">
+        <li class="active"><a href="#ExitPolls">Exit Polls</a></li>
+        <li><a href="#Trends">Trends</a></li>
+      </ul>
+      <div id="polls" class="tab-content">
+        <div id="ExitPolls" class="tab active">
+        </div>
+        <div id="Trends" class="tab">
+        </div>
+      </div>
+    </div>
   </div>
+  <script>
+    $(document).ready(function () {
+      $('.tabs .tab-links a').on('click', function (e) {
+        var currentAttrValue = jQuery(this).attr('href');
+        // Show/Hide Tabs
+        $('.tabs ' + currentAttrValue).show().siblings().hide();
+        // Change/remove current tab to active
+        $(this).parent('li').addClass('active').siblings().removeClass('active');
+        e.preventDefault();
+      });
+    });
+  </script>
   <script src="js/d3-tooltip.js"></script>
   <script>
     var exitPollsData;
@@ -263,7 +286,7 @@
                 var chart = nv.models.lineChart();
                 var fitScreen = false;
                 var width = 600;
-                var height = 150;
+                var height = 170;
                 var zoom = 1;
                 //chart.interpolate("step-before");
                 chart.useInteractiveGuideline(true);
@@ -281,11 +304,18 @@
                 chart.forceY([Math.min(min1, min2) - 2, Math.min(max1, max2)]);
                 chart.interpolate("step-after");
                 d3.select('#chart' + state + ' svg')
-                // .attr('perserveAspectRatio', 'xMinYMid')
+                    .attr('perserveAspectRatio', 'xMinYMid')
                     .attr('width', width)
                     .attr('height', height)
-                    .datum(finaldata);
-                
+                    .datum(finaldata)
+                    .text(state);
+                ;
+                d3.select('#chart' + state + ' svg')
+                    .append("text")
+                    .attr("x", width / 2)
+                    .attr("y", 10)
+                    .attr("text-anchor", "middle")
+                    .text(state.toUpperCase());
                 setChartViewBox();
                 //resizeChart();
                 
@@ -304,7 +334,7 @@
                       .height(h);
                   
                   d3.select('#chart' + state + ' svg')
-                  // .attr('viewBox', '0 0 ' + w + ' ' + h)
+                      .attr('viewBox', '0 0 ' + w + ' ' + h)
                       .transition().duration(500)
                       .call(chart);
                 }
@@ -349,14 +379,28 @@
     function plotState(state) {
       // var state = $("#state").val();
       //d3.select('body').append("<div id='chart"+state+"' class='with-transitions' style='width:50%'><svg></svg></div>")
-      d3.select('#polls').append('div')
+      d3.select('#Trends').append('div')
           .attr("id", "chart" + state)
           .attr("class", "with-transitions")
-          .style("width", "90%")
-          .style("height", "150")
+          
           .append('svg')
-      var url = 'http://elections.huffingtonpost.com/pollster/api/charts/2016-' + state + '-president-trump-vs-clinton.json?callback=pollsterCallback';
+      var url = getUrl(state);
       plotTrends(state, url);
     }
+    function getUrl(state) {
+      var url;
+      switch (state) {
+        case "california":
+        case "florida":
+          url = 'http://elections.huffingtonpost.com/pollster/api/charts/2016-' + state + '-presidential-general-election-trump-vs-clinton.json?callback=pollsterCallback';
+          break;
+        default:
+          url = 'http://elections.huffingtonpost.com/pollster/api/charts/2016-' + state + '-president-trump-vs-clinton.json?callback=pollsterCallback';
+        
+        
+      }
+      return url;
+    }
+  
   </script>
 </body>

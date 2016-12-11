@@ -202,10 +202,24 @@
               .attr("class", "with-transitions")
               .style("width", "50%")
               .append('svg')
-      var url = 'http://elections.huffingtonpost.com/pollster/api/charts/2016-' + state + '-president-trump-vs-clinton.json?callback=pollsterCallback';
+      var url = getUrl(state)
       plotTrends(state, url);
     }
-
+    function getUrl(state) {
+      var url;
+      switch(state)
+      {
+        case "california":
+        case "florida":
+        url = 'http://elections.huffingtonpost.com/pollster/api/charts/2016-'+state+'-presidential-general-election-trump-vs-clinton.json?callback=pollsterCallback';
+        break;
+        default:
+        url = 'http://elections.huffingtonpost.com/pollster/api/charts/2016-'+state+'-president-trump-vs-clinton.json?callback=pollsterCallback';
+  
+  
+      }
+      return url;
+    }
 
 
 

@@ -27,7 +27,7 @@ body, table {
 }
 
 #map {
-  width: 48%;
+  width: 40%;
   height: 71%;
   margin-top: 2%;
   margin-left: 1%;
@@ -36,14 +36,15 @@ body, table {
   float: left;
 }
 
-#polls {
-  width: 48%;
+.tabs {
+  width: 56%;
   height: 71%;
   margin-top: 2%;
   margin-left: 1%;
   margin-right: 1%;
   display: inline;
   float: right;
+  background: #ddd;
   overflow: scroll;
 }
 
@@ -75,3 +76,57 @@ body, table {
   top: 100%;
   left: 0;
 }
+
+.nvd3-svg {
+  height: auto !important;
+}
+
+/*----- Tab Links -----*/
+
+.tab-links {
+  padding: 0px
+}
+
+.tab-links:after {
+  display: block;
+  clear: both;
+  content: '';
+}
+
+.tab-links li {
+  margin: 0px 5px;
+  float: left;
+  list-style: none;
+}
+
+.tab-links a {
+  padding: 9px 15px;
+  display: inline-block;
+  border-radius: 3px 3px 0px 0px;
+  background: #7FB5DA;
+  font-size: 16px;
+  font-weight: 600;
+  color: #4c4c4c;
+  transition: all linear 0.15s;
+}
+
+.tab-links a:hover {
+  background: #a7cce5;
+  text-decoration: none;
+}
+
+li.active a, li.active a:hover {
+  background: #fff;
+  color: #4c4c4c;
+}
+
+/*----- Content of Tabs -----*/
+
+.tab {
+  display: none;
+}
+
+.tab.active {
+  display: block;
+}
+
