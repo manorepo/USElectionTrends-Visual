@@ -2,6 +2,8 @@
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://d3js.org/d3.v3.min.js"></script>
+  <link href="lib/nv.d3.css" rel="stylesheet" type="text/css">
+  <script src="lib/nv.d3.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="style.css">
   <title>US Election Trends</title>
@@ -22,8 +24,31 @@
     </div>
     <div id="summary">summary visualization here</div>
     <div id="map"></div>
-    <div id="polls">polls here</div>
+    <div class="tabs">
+      <ul class="tab-links">
+        <li class="active"><a href="#ExitPolls">Exit Polls</a></li>
+        <li><a href="#Trends">Trends</a></li>
+      </ul>
+      <div id="polls" class="tab-content">
+        <div id="ExitPolls" class="tab active">
+        </div>
+        <div id="Trends" class="tab">
+        </div>
+      </div>
+    </div>
   </div>
+  <script>
+    $(document).ready(function () {
+      $('.tabs .tab-links a').on('click', function (e) {
+        var currentAttrValue = jQuery(this).attr('href');
+        // Show/Hide Tabs
+        $('.tabs ' + currentAttrValue).show().siblings().hide();
+        // Change/remove current tab to active
+        $(this).parent('li').addClass('active').siblings().removeClass('active');
+        e.preventDefault();
+      });
+    });
+  </script>
   <script src="js/d3-tooltip.js"></script>
   <script>
     var exitPollsData;
@@ -56,8 +81,7 @@
     });
     //
     
-    //Map SVG
-    
+    //Map Logic
     /* Initialize tooltip */
     var tip = d3.tip()
         .attr('class', 'd3-tip')
@@ -75,7 +99,7 @@
     if (width > 750)
       dimention = 17;
     else
-      dimention = 11;
+      dimention = 9;
     var mapsvgContainer = d3.select("#map").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -108,6 +132,7 @@
             .attr("fill", function (d) {
               return "#fff";
             })
+            .attr("cursor", "pointer")
             .attr("x", function (d) {
               return x(d.x);
             })
@@ -130,7 +155,7 @@
             })
             .on("click", function (d, i) {
               //click event
-              
+              plotState(d.state_name.toLowerCase());
             })
         var mapStateNames = mapsvgContainer.selectAll(".statename")
             .data(data)
@@ -196,5 +221,186 @@
       var year = element.options[element.selectedIndex].value;
       changeYear_UpdateMap(year);
     }
+    
+    function plotTrends(state, url) {
+      var parse = d3.time.format("%Y-%m-%d");
+      var plotData1 = [];
+      var plotData2 = [];
+      var finaldata = [];
+      $.ajax(url,
+          {
+            dataType: 'jsonp',
+            cache: true,
+            success: function (data) {
+              var esitmates = data.estimates_by_date;
+              data.estimates_by_date.forEach(function (d) {
+                var date = parse.parse(d.date);
+                count = 0;
+                d.estimates.forEach(function (e) {
+                  ++count;
+                  if (count == 1) {
+                    plotData1.push({"x": date, "y": e.value, "choice": e.choice});
+                  }
+                  else if (count == 2) {
+                    plotData2.push({"x": date, "y": e.value, "choice": e.choice});
+                  }
+                  else {
+                    //nothing
+                  }
+                });
+                
+              })
+              plotData1.sort(function (a, b) {
+                return a.x - b.x;
+              });
+              plotData2.sort(function (a, b) {
+                return a.x - b.x;
+              });
+              //
+              finaldata.push({
+                area: true,
+                "values": plotData1,
+                "key": "Trump",
+                "color": "rgb(227, 26, 28)"
+              });
+              finaldata.push({
+                area: true,
+                "values": plotData2,
+                "key": "Clinton",
+                "color": "rgb(31, 120, 180)"
+              });
+              var min1 = d3.min(plotData1, function (d) {
+                return d.y;
+              });
+              var max1 = d3.max(plotData1, function (d) {
+                return d.y;
+              })
+              var min2 = d3.min(plotData2, function (d) {
+                return d.y;
+              });
+              var max2 = d3.max(plotData2, function (d) {
+                return d.y;
+              })
+              
+              nv.addGraph(function () {
+                var chart = nv.models.lineChart();
+                var fitScreen = false;
+                var width = 600;
+                var height = 170;
+                var zoom = 1;
+                //chart.interpolate("step-before");
+                chart.useInteractiveGuideline(true);
+                chart.xAxis
+                    .tickFormat(function (d) {
+                      return d3.time.format('%b %d')(new Date(d));
+                    })
+                
+                chart.lines.dispatch.on("elementClick", function (evt) {
+                  console.log(evt);
+                });
+                chart.yAxis
+                    .axisLabel('Percentage')
+                    .tickFormat(d3.format(',.2f'));
+                chart.forceY([Math.min(min1, min2) - 2, Math.min(max1, max2)]);
+                chart.interpolate("step-after");
+                d3.select('#chart' + state + ' svg')
+                    .attr('perserveAspectRatio', 'xMinYMid')
+                    .attr('width', width)
+                    .attr('height', height)
+                    .datum(finaldata)
+                    .text(state);
+                ;
+                d3.select('#chart' + state + ' svg')
+                    .append("text")
+                    .attr("x", width / 2)
+                    .attr("y", 10)
+                    .attr("text-anchor", "middle")
+                    .text(state.toUpperCase());
+                setChartViewBox();
+                //resizeChart();
+                
+                //  nv.utils.windowResize(resizeChart);
+                
+                d3.select('#zoomIn').on('click', zoomIn);
+                d3.select('#zoomOut').on('click', zoomOut);
+                
+                
+                function setChartViewBox() {
+                  var w = width * zoom,
+                      h = height * zoom;
+                  
+                  chart
+                      .width(w)
+                      .height(h);
+                  
+                  d3.select('#chart' + state + ' svg')
+                      .attr('viewBox', '0 0 ' + w + ' ' + h)
+                      .transition().duration(500)
+                      .call(chart);
+                }
+                
+                function zoomOut() {
+                  zoom += .25;
+                  setChartViewBox();
+                }
+                
+                function zoomIn() {
+                  if (zoom <= .5) return;
+                  zoom -= .25;
+                  setChartViewBox();
+                }
+                
+                // This resize simply sets the SVG's dimensions, without a need to recall the chart code
+                // Resizing because of the viewbox and perserveAspectRatio settings
+                // This scales the interior of the chart unlike the above
+                function resizeChart() {
+                  var container = d3.select('#chart' + state);
+                  var svg = container.select('svg');
+                  
+                  if (fitScreen) {
+                    // resize based on container's width AND HEIGHT
+                    var windowSize = nv.utils.windowSize();
+                    svg.attr("width", windowSize.width);
+                    svg.attr("height", windowSize.height);
+                  } else {
+                    // resize based on container's width
+                    var aspect = chart.width() / chart.height();
+                    var targetWidth = parseInt(container.style('width'));
+                    svg.attr("width", targetWidth);
+                    svg.attr("height", Math.round(targetWidth / aspect));
+                  }
+                }
+                
+                return chart;
+              });
+            }
+          });
+    }
+    function plotState(state) {
+      // var state = $("#state").val();
+      //d3.select('body').append("<div id='chart"+state+"' class='with-transitions' style='width:50%'><svg></svg></div>")
+      d3.select('#Trends').append('div')
+          .attr("id", "chart" + state)
+          .attr("class", "with-transitions")
+          
+          .append('svg')
+      var url = getUrl(state);
+      plotTrends(state, url);
+    }
+    function getUrl(state) {
+      var url;
+      switch (state) {
+        case "california":
+        case "florida":
+          url = 'http://elections.huffingtonpost.com/pollster/api/charts/2016-' + state + '-presidential-general-election-trump-vs-clinton.json?callback=pollsterCallback';
+          break;
+        default:
+          url = 'http://elections.huffingtonpost.com/pollster/api/charts/2016-' + state + '-president-trump-vs-clinton.json?callback=pollsterCallback';
+        
+        
+      }
+      return url;
+    }
+  
   </script>
 </body>
