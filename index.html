@@ -13,7 +13,7 @@
   <div id="visualizations">
     <div id="options">
       <label>Year: </label>
-      <select id="yearSelect" onchange="yearChangeEvent(this)">
+      <select onchange="yearChangeEvent(this)">
         <option value="2012">2012</option>
         <option value="2008">2008</option>
         <option value="2004">2004</option>
@@ -53,14 +53,14 @@
   </script>
   <script src="js/d3-tooltip.js"></script>
   <script>
-    var margin = {top: 10, right: 20, bottom: 0, left: 20};
+    var summaryMargin = {top: 10, right: 20, bottom: 0, left: 20};
     var candidateNameY = 20;
     var portionBarHeight = 50;
     var portionBarY = candidateNameY + 10;
     var svgHeight = $("#summary").height();
     var svgWidth = $("#summary").width();
-    var w = svgWidth - margin.left - margin.right;
-    var h = svgHeight - margin.bottom - margin.top;
+    var w = svgWidth - summaryMargin.left - summaryMargin.right;
+    var h = svgHeight - summaryMargin.bottom - summaryMargin.top;
     
     // Scale for electoral votes to vote bar (538 electoral votes total).
     var portionScale = d3.scale.linear().domain([0, 538]).range([0, w]);
@@ -70,7 +70,7 @@
       .attr("height", svgHeight)
       .attr("width", svgWidth)
       .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .attr("transform", "translate(" + summaryMargin.left + "," + summaryMargin.top + ")");
     
     // Names of the presidential candidates for a given year.
     summarySvg.append("text")
