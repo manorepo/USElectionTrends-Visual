@@ -66,6 +66,8 @@ From the exit poll time series data, it is evident that voter choices are depend
 
 ![Alt text](/screenshots/exit-poll-findings.PNG?raw=true "Exit Poll Findings")
 
+#### For every two consecutive elections, the winning party(Republican or Democrats) was getting changed alternatively from 1984.
+
 #### Team Responsibilities
 
 Akhila Tummala(aktummal) - Data collection and Exit polls data for a specific year
