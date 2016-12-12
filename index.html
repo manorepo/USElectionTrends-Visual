@@ -33,6 +33,7 @@
       <svg id="summarySvg"></svg>
     </div>
     <div id="map"></div>
+    
     <div class="tabs">
       <ul class="tab-links">
         <li class="active"><a href="#ExitPolls_Div">Exit Polls</a></li>
@@ -198,6 +199,7 @@
     d3.json("data/finalResults.json", function (data) {
       resultsData = data;
       updateSummary(2016);
+      plotState("national",resultsData[2016].demTotalPer,resultsData[2016].repTotalPer);
     });
     
     function updateSummary(year) {
@@ -374,6 +376,7 @@
       console.log("exitPollsData");
       console.log(exitPollsData);
       plotPolls("2016");
+     
     });
     //
     
@@ -394,8 +397,10 @@
     //Set dimention of map squares based on width
     if (width > 750)
       dimention = 17;
+    else if(width<=450)
+      dimention=9;
     else
-      dimention = 9;
+      dimention = 11;
     var mapsvgContainer = d3.select("#map").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -479,7 +484,7 @@
             })
             .on("click", function (d, i) {
               //click event
-              plotState(d.state_name.toLowerCase());
+              plotState(d.state_name.toLowerCase(),d.DemPer,d.RepPer);
             })
         var mapStateNames = mapsvgContainer.selectAll(".statename")
             .data(data)
@@ -585,7 +590,7 @@
       plotPolls(year);
     }
     
-    function plotTrends(state, url) {
+    function plotTrends(state, url,demper,repper) {
       var parse = d3.time.format("%Y-%m-%d");
       var plotData1 = [];
       var plotData2 = [];
@@ -614,6 +619,8 @@
                 });
                 
               })
+              plotData1.push({"x": parse.parse("2016-11-09"), "y": repper.replace("%",""), "choice": "demo"});
+              plotData2.push({"x": parse.parse("2016-11-09"), "y": demper.replace("%",""), "choice": "rep"});
               plotData1.sort(function (a, b) {
                 return a.x - b.x;
               });
@@ -666,6 +673,7 @@
                     .axisLabel('Percentage')
                     .tickFormat(d3.format(',.2f'));
                 chart.forceY([Math.min(min1, min2) - 2, Math.min(max1, max2)]);
+                chart.forceX([parse.parse("2016-08-01"), parse.parse("2016-11-15")]);
                 chart.interpolate("step-after");
                 d3.select('#chart' + s + ' svg')
                     .attr('perserveAspectRatio', 'xMinYMid')
@@ -740,7 +748,7 @@
             }
           });
     }
-    function plotState(state) {
+    function plotState(state,demper,repper) {
       // var state = $("#state").val();
       //d3.select('body').append("<div id='chart"+state+"' class='with-transitions' style='width:50%'><svg></svg></div>")
       var s=state.replace(" ","-");
@@ -750,7 +758,7 @@
           
           .append('svg')
       var url = getUrl(state);
-      plotTrends(state, url);
+      plotTrends(state, url,demper,repper);
     }
     function getUrl(state) {
       var url;
@@ -759,6 +767,9 @@
         case "california":
         case "florida":
           url = 'https://elections.huffingtonpost.com/pollster/api/charts/2016-' + s + '-presidential-general-election-trump-vs-clinton.json?callback=pollsterCallback';
+          break;
+        case "national":
+          url = 'https://elections.huffingtonpost.com/pollster/api/charts/2016-general-election-trump-vs-clinton.json?callback=pollsterCallback';
           break;
         default:
           url = 'https://elections.huffingtonpost.com/pollster/api/charts/2016-' + s + '-president-trump-vs-clinton.json?callback=pollsterCallback';
