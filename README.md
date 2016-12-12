@@ -8,10 +8,16 @@ The web application can be found at https://manorepo.github.io/USElectionTrends-
 
 ### Data 
 
+Application uses the data collected from the [American Presidency Project](http://www.presidency.ucsb.edu/elections.php) 
 
 
 ### Functionality 
 
+_**Election Results**_
+
+_**Exit Polls**_
+
+_**Trends*_
 
 #### Team Responsibilities
 
@@ -22,5 +28,3 @@ James Taber(jmtaber129) - Web Structure, Results Summary and Exit poll over the 
 Manohar Kotapati(manorepo) - Huffington Pollster API, Presedential Candidate Trends before the election date.
 
 Sunandha Perumalla(sunandha21) - Map and Election Results integration
-
-
