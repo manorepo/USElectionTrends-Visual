@@ -56,4 +56,4 @@ James Taber(jmtaber129) - Web Structure, Results Summary and Exit poll over the 
 
 Manohar Kotapati(manorepo) - Huffington Pollster API, Presedential Candidate Trends before the election date.
 
-Sunandha Perumalla(sunandha21) - Map and Election Results integration
+Sunandha Perumalla(sunandha21) - Map and Election Results Visualization
