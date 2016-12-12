@@ -153,6 +153,10 @@ li.active a, li.active a:hover {
   text-align: left;
 }
 
+.statetooltip .county-name {
+  font-size: 13px;
+  padding: 2px;
+}
 .statetooltip table {
   width: 96%;
 }
