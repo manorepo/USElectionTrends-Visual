@@ -2,9 +2,9 @@
 
 Application to visualize the US elections data from 1972 to 2016 and is categorized into following sections
 
-- Election Results: Actual Results for the specific year.
-- Exit Polls: The trends of vote percentage of demographic groups over the time.
-- Candidates Trends: Trends of presidentail candidates before election of the specific state.
+- Election Results: State wide results for the specific year.
+- Exit Polls: The trends of vote percentage of different demographic groups over the time.
+- Candidates Trends: Trends of presidential candidates before election of the specific state.
 
 #### Click the image below to watch a short video demo.
 [![ScreenShot](/screenshots/thumbnail.jpg)](https://youtu.be/M5YvbRzGtl0)
