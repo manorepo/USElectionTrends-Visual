@@ -51,6 +51,7 @@
         <div id="exitPollsSeries">
         </div>
         <div id="Trends" class="tab">
+          <a onclick="resetTrends()" style="cursor: pointer;float:right;margin: 10px">Reset</a>
         </div>
       </div>
     </div>
@@ -93,7 +94,6 @@
     summarySvg.append("image")
         .attr("id", "demImg")
         .attr("y", 5)
-        .attr("xlink:href", "obama.gif")
         .attr("width", "50")
         .attr("height", "50");
     summarySvg.append("text")
@@ -112,7 +112,6 @@
         .attr("id", "repImg")
         .attr("x", w-50)
         .attr("y", 5)
-        .attr("xlink:href", "romne.jpg")
         .attr("width", "50")
         .attr("height", "50");
     // Elements that visualize the vote percentage as bars.
@@ -539,6 +538,7 @@
       var plotData1 = [];
       var plotData2 = [];
       var finaldata = [];
+      var s=state.replace(" ","-");
       $.ajax(url,
           {
             dataType: 'jsonp',
@@ -615,14 +615,14 @@
                     .tickFormat(d3.format(',.2f'));
                 chart.forceY([Math.min(min1, min2) - 2, Math.min(max1, max2)]);
                 chart.interpolate("step-after");
-                d3.select('#chart' + state + ' svg')
+                d3.select('#chart' + s + ' svg')
                     .attr('perserveAspectRatio', 'xMinYMid')
                     .attr('width', width)
                     .attr('height', height)
                     .datum(finaldata)
                     .text(state);
                 ;
-                d3.select('#chart' + state + ' svg')
+                d3.select('#chart' + s + ' svg')
                     .append("text")
                     .attr("x", width / 2)
                     .attr("y", 10)
@@ -645,7 +645,7 @@
                       .width(w)
                       .height(h);
                   
-                  d3.select('#chart' + state + ' svg')
+                  d3.select('#chart' + s + ' svg')
                       .attr('viewBox', '0 0 ' + w + ' ' + h)
                       .transition().duration(500)
                       .call(chart);
@@ -666,7 +666,7 @@
                 // Resizing because of the viewbox and perserveAspectRatio settings
                 // This scales the interior of the chart unlike the above
                 function resizeChart() {
-                  var container = d3.select('#chart' + state);
+                  var container = d3.select('#chart' + s);
                   var svg = container.select('svg');
                   
                   if (fitScreen) {
@@ -691,9 +691,10 @@
     function plotState(state) {
       // var state = $("#state").val();
       //d3.select('body').append("<div id='chart"+state+"' class='with-transitions' style='width:50%'><svg></svg></div>")
+      var s=state.replace(" ","-");
       d3.select('#Trends').append('div')
-          .attr("id", "chart" + state)
-          .attr("class", "with-transitions")
+          .attr("id", "chart" + s)
+          .attr("class", "with-transitions statetrend")
           
           .append('svg')
       var url = getUrl(state);
@@ -701,17 +702,21 @@
     }
     function getUrl(state) {
       var url;
+      var s=state.replace(" ","-");
       switch (state) {
         case "california":
         case "florida":
-          url = 'https://elections.huffingtonpost.com/pollster/api/charts/2016-' + state + '-presidential-general-election-trump-vs-clinton.json?callback=pollsterCallback';
+          url = 'https://elections.huffingtonpost.com/pollster/api/charts/2016-' + s + '-presidential-general-election-trump-vs-clinton.json?callback=pollsterCallback';
           break;
         default:
-          url = 'https://elections.huffingtonpost.com/pollster/api/charts/2016-' + state + '-president-trump-vs-clinton.json?callback=pollsterCallback';
+          url = 'https://elections.huffingtonpost.com/pollster/api/charts/2016-' + s + '-president-trump-vs-clinton.json?callback=pollsterCallback';
         
         
       }
       return url;
+    }
+    function resetTrends(){
+      d3.selectAll(".statetrend").remove();
     }
     //
     //Exit poll data
