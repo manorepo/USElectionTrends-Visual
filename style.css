@@ -133,6 +133,7 @@ li.active a, li.active a:hover {
   width: 90%;
   margin: auto;
 }
+
 .statetooltip {
   padding: 2px;
   max-width: 300px;
@@ -151,6 +152,7 @@ li.active a, li.active a:hover {
   overflow: hidden;
   text-align: left;
 }
+
 .statetooltip table {
   width: 96%;
 }
@@ -176,3 +178,10 @@ li.active a, li.active a:hover {
   color: #fff;
 }
 
+#poll_cat {
+  width: 300px;
+}
+
+.poll-options {
+  width: 90%;
+}

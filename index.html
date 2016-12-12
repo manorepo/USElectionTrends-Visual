@@ -15,12 +15,18 @@
     <div id="options">
       <label>Year: </label>
       <select onchange="yearChangeEvent(this)">
+        <option value="2016">2016</option>
         <option value="2012">2012</option>
         <option value="2008">2008</option>
         <option value="2004">2004</option>
         <option value="2000">2000</option>
         <option value="1996">1996</option>
         <option value="1992">1992</option>
+        <option value="1988">1988</option>
+        <option value="1984">1984</option>
+        <option value="1980">1980</option>
+        <option value="1976">1976</option>
+        <option value="1972">1972</option>
       </select>
     </div>
     <div id="summary">
@@ -29,11 +35,17 @@
     <div id="map"></div>
     <div class="tabs">
       <ul class="tab-links">
-        <li class="active"><a href="#ExitPolls">Exit Polls</a></li>
+        <li class="active"><a href="#ExitPolls_Div">Exit Polls</a></li>
         <li><a href="#Trends">Trends</a></li>
       </ul>
       <div id="polls" class="tab-content">
-        <div id="ExitPolls" class="tab active">
+        <div id="ExitPolls_Div" class="tab active">
+          <div class="center-block poll-options">
+          <select id="poll_cat"></select>
+          <a onclick="resetPoll()" style="cursor: pointer">Reset</a>
+            </div>
+          <div id="ExitPolls">
+          </div>
         </div>
         <div id="Trends" class="tab">
         </div>
@@ -246,7 +258,7 @@
       });
       console.log("exitPollsData");
       console.log(exitPollsData);
-      plotPolls("2012");
+      plotPolls("2016");
     });
     //
     
@@ -397,8 +409,10 @@
     //function to trigger events on Year Change
     function yearChangeEvent(element) {
       var year = element.value;
-      updateSummary(year);
-      changeYear_UpdateMap(year);
+      if(year>1988) {
+        updateSummary(year);
+        changeYear_UpdateMap(year);
+      }
       plotPolls(year);
     }
     
@@ -584,7 +598,7 @@
     //
     //Exit poll data
     function plotPolls(year) {
-      var yearindex = ((2016 - year) / 4);
+      var yearindex = ((year-1972) / 4);
       var currYear = exitPollsData.data[yearindex];
       
       var categ = d3.select('#ExitPolls').selectAll('.poll-section')
@@ -601,6 +615,38 @@
             return "<h4 class='heading'>" + d.desc + "<span></span></h4>"
             
           })
+      d3.select("#poll_cat").selectAll('option').remove();
+      /*d3.select("#poll_cat").append('option')
+          .html(function (d) {
+            return  "--Select Category--"
+          })*/
+      d3.select("#poll_cat").selectAll('option')
+          .data(currYear.results.filter(function (d) {
+                if(d!=undefined && d.exit_poll_subcategories!=undefined && d.exit_poll_subcategories.length>0)
+                  return true;
+              }), function (d, i) {
+                if(d!=undefined)
+                return d.code;
+              }
+          )
+          
+          .enter()
+          .append('option')
+          .html(function (d) {
+            return  d.desc;
+          })
+     
+      d3.select("#poll_cat").on("change",function (d) {
+        var data=d3.select(this.options[this.selectedIndex]).datum();
+        var subcat=data.exit_poll_subcategories;
+        categ
+            .filter(function (d) {
+              var $this = $(this);
+              $this.toggleClass('poll-inactive', !(d.code==data.code));
+            })
+        
+      })
+  
       categ.exit().remove();
       var subcat = categ.selectAll('.poll-g')
           .data(
@@ -671,6 +717,12 @@
       for (var i = 0; i < 40; i++) {
         persons += "<i class='material-icons'>person_outline</i>";
       }
+    }
+    function resetPoll(){
+      $('.poll-section').each(function () {
+        var $this = $(this);
+        $this.toggleClass('poll-inactive', !$this.find('.poll-active').length);
+      });
     }
     function getToolTip(d) {
       var checkmarkChar = unescape("%u2713");
