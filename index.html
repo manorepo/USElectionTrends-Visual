@@ -379,6 +379,7 @@
     
     //Map Logic
     /* Initialize tooltip */
+    var currentYear=2016;
     var tip = d3.tip()
         .attr('class', 'd3-tip')
         .offset([0, 0])
@@ -450,6 +451,31 @@
               tip.hide();
               d3.select(this).style("stroke","");
               d3.select(this).style("stroke-width","");
+              if(currentYear==2016) {
+                maprect.selectAll("rect")
+                    .filter(function (d) {
+                      switch (d.state_name) {
+                        case "Michigan":
+                        case "Pennsylvania":
+                        case "Maine":
+                        case "North Carolina":
+                        case "Wisconsin":
+                        case "Florida":
+                          return true;
+                          break
+                      }
+          
+                    })
+                    .transition("ease-out")
+                    .duration(500)
+                    .style("stroke", "#00FF00")
+                    .style("stroke-width", "5px")
+              }
+              else{
+                maprect.selectAll("rect")
+                    .style("stroke", "")
+                    .style("stroke-width", "")
+              }
             })
             .on("click", function (d, i) {
               //click event
@@ -484,8 +510,8 @@
               d.RepPer = stateres.RepPer;
               d.DemVotes = stateres.DemVotes;
               d.RepVotes = stateres.RepVotes;
-              d.demCandidate = resultsData[2012].demCandidate;
-              d.repCandidate = resultsData[2012].repCandidate;
+              d.demCandidate = resultsData[2016].demCandidate;
+              d.repCandidate = resultsData[2016].repCandidate;
               
               if (stateres.RepEV != "") {
                 return "#B43030"
@@ -523,11 +549,37 @@
                 return "#405695"
               
             });
+        if(Year==2016) {
+          maprect.selectAll("rect")
+              .filter(function (d) {
+                switch (d.state_name) {
+                  case "Michigan":
+                  case "Pennsylvania":
+                  case "Maine":
+                  case "North Carolina":
+                  case "Wisconsin":
+                  case "Florida":
+                    return true;
+                    break
+                }
+          
+              })
+              .transition("ease-out")
+              .duration(500)
+              .style("stroke", "#00FF00")
+              .style("stroke-width", "5px")
+        }
+        else{
+          maprect.selectAll("rect")
+              .style("stroke", "")
+              .style("stroke-width", "")
+        }
       });
     }
     //function to trigger events on Year Change
     function yearChangeEvent(element) {
       var year = element.value;
+      currentYear=year;
       updateSummary(year);
       changeYear_UpdateMap(year);
       plotPolls(year);
