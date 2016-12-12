@@ -33,6 +33,7 @@ The summary shows the candidates participated and the total elctoral votes they 
 
 _**Exit Polls**_
 
+_***Specific Year***_
 When the user selects the exit polls the data is represented in bar graphs according to votes percentage of different categories.
 
 ![ScreenShot](https://github.com/manorepo/USElectionTrends-Visual/blob/master/screenshots/exitpoll1.png)
