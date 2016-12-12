@@ -43,6 +43,11 @@ _***Over the Time:***_
 
 _**Trends**_
 
+When the user selects the trends and any state on the map the trends before election of that particular state 
+are showed using area graphs.
+
+![ScreenShot](https://github.com/manorepo/USElectionTrends-Visual/blob/master/screenshots/trends.jpg)
+
 #### Team Responsibilities
 
 Akhila Tummala(aktummal) - Data collection and Exit polls data for a specific year
