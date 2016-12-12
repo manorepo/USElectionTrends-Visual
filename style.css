@@ -11,6 +11,14 @@ body, table {
   font: 12px Arial;
 }
 
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+} 
+
 #visualizations {
   height: 90%;
   padding: 15px;

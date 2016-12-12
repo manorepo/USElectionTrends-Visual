@@ -36,6 +36,7 @@
     <div class="tabs">
       <ul class="tab-links">
         <li class="active"><a href="#ExitPolls_Div">Exit Polls</a></li>
+        <li><a href="#exitPollsSeries">Exit Polls (over time)</a></li>
         <li><a href="#Trends">Trends</a></li>
       </ul>
       <div id="polls" class="tab-content">
@@ -46,6 +47,8 @@
             </div>
           <div id="ExitPolls">
           </div>
+        </div>
+        <div id="exitPollsSeries">
         </div>
         <div id="Trends" class="tab">
         </div>
@@ -246,6 +249,7 @@
     }
     
     var exitPollsData;
+    var exitPollsTimeSeries = {};
     var categoriesDesc = [];
     d3.json("ExitPolls.json", function (data) {
       this.exitPollsData = data;
@@ -265,11 +269,106 @@
       this.exitPollsData.data.forEach(function (d) {
         d.results.forEach(function (res) {
           res.desc = categoriesDesc[res.code];
+          
+          if (!exitPollsTimeSeries[res.code]) {
+            exitPollsTimeSeries[res.code] = {};
+            exitPollsTimeSeries[res.code].desc = res.desc;
+            exitPollsTimeSeries[res.code].subNum = 0;
+            exitPollsTimeSeries[res.code].subMaxLen = 0;
+            exitPollsTimeSeries[res.code].subCats = {};
+          }
+          
           res.exit_poll_subcategories.forEach(function (sub) {
-            sub.desc = categoriesDesc[sub.code]
+            sub.desc = categoriesDesc[sub.code];
+            
+            if (!exitPollsTimeSeries[res.code].subCats[sub.code]) {
+              ++exitPollsTimeSeries[res.code].subNum;
+              exitPollsTimeSeries[res.code].subCats[sub.code] = {};
+              exitPollsTimeSeries[res.code].subCats[sub.code].desc = sub.desc;
+              exitPollsTimeSeries[res.code].subCats[sub.code].series = [];
+            }
+            if (sub.candidates.dem != "") {
+              exitPollsTimeSeries[res.code].subCats[sub.code].series.push({
+                year: d.year, demValue: sub.candidates.dem, repValue: sub.candidates.rep
+              });
+              if (exitPollsTimeSeries[res.code].subCats[sub.code].series.length > exitPollsTimeSeries[res.code].subMaxLen) {
+                exitPollsTimeSeries[res.code].subMaxLen = exitPollsTimeSeries[res.code].subCats[sub.code].series.length;
+              }
+            }
+            
           });
+          
         });
       });
+      
+      //Width and height
+      var margin = {top: 10, right: 5, bottom: 30, left: 50};
+      var w = $("#exitPollsSeries").width() * 0.95 - margin.left - margin.right;
+      var h = 150 - margin.bottom - margin.top;
+      var svgHeight = h + margin.top + margin.bottom;
+      var svgWidth = w + margin.left + margin.right;
+
+      // Set up scales.
+      var x = d3.time.scale().domain([new Date(1972,1,1), new Date(2016,1,1)]).range([0, w]);
+      var y = d3.scale.linear().domain([0, 100]).range([h, 0]);
+
+      // Define the axes.
+      var xAxis = d3.svg.axis().scale(x).orient("bottom").ticks(11);
+      var yAxis = d3.svg.axis().scale(y).orient("left").ticks(5);
+
+      // Define the line.
+      var demLine = d3.svg.line()
+          .x(function(d) { 
+            var date = new Date(d.year, 1, 1);
+            return x(date);
+          })
+          .y(function(d) {
+            return y(d.demValue);
+          });
+      
+      var repLine = d3.svg.line()
+          .x(function(d) { 
+            var date = new Date(d.year, 1, 1);
+            return x(date);
+          })
+          .y(function(d) {
+            return y(d.repValue);
+          });
+      
+      for (code in exitPollsTimeSeries) {
+        if (exitPollsTimeSeries[code].subNum == 0 || exitPollsTimeSeries[code].subMaxLen <= 1) continue;
+        
+        d3.select("#exitPollsSeries").append("h4").text(exitPollsTimeSeries[code].desc);
+        
+        for (subCode in exitPollsTimeSeries[code].subCats) {
+          if (!exitPollsTimeSeries[code].subCats[subCode].desc) continue;
+          if (exitPollsTimeSeries[code].subCats[subCode].series.length <= 1) continue;
+          
+          d3.select("#exitPollsSeries").append("h6").text(exitPollsTimeSeries[code].subCats[subCode].desc);
+          var svg = d3.select("#exitPollsSeries").append("svg").attr("height", svgHeight).attr("width", svgWidth)
+              .append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+          
+          svg.append("path").datum(exitPollsTimeSeries[code].subCats[subCode].series)
+            .attr("stroke", "blue")
+            .attr("fill", "none")
+            .attr("d", demLine);
+          
+          svg.append("path").datum(exitPollsTimeSeries[code].subCats[subCode].series)
+            .attr("stroke", "red")
+            .attr("fill", "none")
+            .attr("d", repLine);
+          
+          svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + h + ")")
+            .call(xAxis);
+          
+          svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis);
+        }
+      }
+      
       console.log("exitPollsData");
       console.log(exitPollsData);
       plotPolls("2016");
