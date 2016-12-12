@@ -309,8 +309,8 @@
     var maprect;
     var curr_Year_State_Result = [];
     
-    //initially 2012 Election results
-    d3.csv("data/2012_Election.csv", function (result) {
+    //initially 2016 Election results
+    d3.csv("data/2016_Election.csv", function (result) {
       result.forEach(function (stateRes) {
         if (stateRes.STATE.includes("Dist. of Col"))
           stateRes.STATE = "District of Columbia";
