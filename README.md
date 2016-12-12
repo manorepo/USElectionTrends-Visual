@@ -2,7 +2,9 @@
 Visualization - US Election Trends
 
 #### Click the image below to watch a short video demo.
+[![ScreenShot](/screenshots/thumbnail.jpg)](https://youtu.be/M5YvbRzGtl0)
 
+The web application can be found at https://manorepo.github.io/USElectionTrends-Visual/.
 
 ### Data 
 
