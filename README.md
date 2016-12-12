@@ -17,6 +17,8 @@ Election Resulsts:  [American Presidency Project](http://www.presidency.ucsb.edu
 Exit Polls: NewYorkTimes and Edison Research
 
 
+Trends: [Huffintonpost Pollster](http://elections.huffingtonpost.com/pollster/api)
+
 
 ### Functionality 
 
