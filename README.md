@@ -8,7 +8,9 @@ The web application can be found at https://manorepo.github.io/USElectionTrends-
 
 ### Data 
 
-Application uses the data collected from the [American Presidency Project](http://www.presidency.ucsb.edu/elections.php) 
+Application uses the data from the folloing sources
+Election Resulsts:  [American Presidency Project](http://www.presidency.ucsb.edu/elections.php) 
+
 
 
 ### Functionality 
