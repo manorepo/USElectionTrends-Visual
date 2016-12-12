@@ -48,6 +48,10 @@ _Over the Time:_
 
 _**Trends**_
 
+States which had the different result from the polls survey are highlighted as below
+
+![ScreenShot](https://github.com/manorepo/USElectionTrends-Visual/blob/master/screenshots/changestates.png)
+
 When the user selects the trends and any state on the map the trends before election of that particular state 
 are showed using area graphs.
 
