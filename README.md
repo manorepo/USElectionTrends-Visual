@@ -38,6 +38,7 @@ When the user selects the exit polls the data is represented in bar graphs accor
 
 ![ScreenShot](https://github.com/manorepo/USElectionTrends-Visual/blob/master/screenshots/exitpoll1.png)
 
+_***Over the Time***_
 _**Trends*_
 
 #### Team Responsibilities
