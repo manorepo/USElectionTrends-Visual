@@ -1,4 +1,4 @@
-var remaining = 7;
+var remaining = 12;
 var finalResults = {};
 var stateLookup = {};
 function addResults(data, yearObj) {
@@ -102,6 +102,51 @@ d3.csv("data/1992_Election.csv", function(data) {
   finalResults[1992].demCandidate = "William J. Clinton";
   finalResults[1992].repCandidate = "George Bush";
   addResults(data, finalResults[1992]);
+  --remaining;
+  maybePrint();
+});
+
+d3.csv("data/1988_Election.csv", function(data) {
+  finalResults[1988] = {};
+  finalResults[1988].demCandidate = "Michael Dukakis";
+  finalResults[1988].repCandidate = "George Bush";
+  addResults(data, finalResults[1988]);
+  --remaining;
+  maybePrint();
+});
+
+d3.csv("data/1984_Election.csv", function(data) {
+  finalResults[1984] = {};
+  finalResults[1984].demCandidate = "Walter Mondale";
+  finalResults[1984].repCandidate = "Ronald Reagan";
+  addResults(data, finalResults[1984]);
+  --remaining;
+  maybePrint();
+});
+
+d3.csv("data/1980_Election.csv", function(data) {
+  finalResults[1980] = {};
+  finalResults[1980].demCandidate = "Jimmy Carter";
+  finalResults[1980].repCandidate = "Ronald Reagan";
+  addResults(data, finalResults[1980]);
+  --remaining;
+  maybePrint();
+});
+
+d3.csv("data/1976_Election.csv", function(data) {
+  finalResults[1976] = {};
+  finalResults[1976].demCandidate = "Jimmy Carter";
+  finalResults[1976].repCandidate = "Gerald R. Ford";
+  addResults(data, finalResults[1976]);
+  --remaining;
+  maybePrint();
+});
+
+d3.csv("data/1972_Election.csv", function(data) {
+  finalResults[1972] = {};
+  finalResults[1972].demCandidate = "George McGovern";
+  finalResults[1972].repCandidate = "Richard M. Nixon";
+  addResults(data, finalResults[1972]);
   --remaining;
   maybePrint();
 });
