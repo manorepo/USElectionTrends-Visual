@@ -208,7 +208,10 @@
           .text(resultsData[year].demCandidate + " " + ((resultsData[year].demTotalEv >= 270) ? checkmarkChar : ""));
       d3.select("#repName")
           .text(resultsData[year].repCandidate + " " + ((resultsData[year].repTotalEv >= 270) ? checkmarkChar : ""));
-      
+      d3.select("#demImg")
+          .attr("xlink:href", "images/" + resultsData[year].demCandidate + ".jpg")
+      d3.select("#repImg")
+          .attr("xlink:href", "images/" + resultsData[year].repCandidate + ".jpg")
       d3.select("#demPortionText")
           .text(resultsData[year].demTotalEv);
       d3.select("#repPortionText")
