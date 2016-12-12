@@ -195,7 +195,7 @@
     var resultsData;
     d3.json("data/finalResults.json", function (data) {
       resultsData = data;
-      updateSummary(2012);
+      updateSummary(2016);
     });
     
     function updateSummary(year) {
@@ -427,10 +427,8 @@
     //function to trigger events on Year Change
     function yearChangeEvent(element) {
       var year = element.value;
-      if(year>1988) {
-        updateSummary(year);
-        changeYear_UpdateMap(year);
-      }
+      updateSummary(year);
+      changeYear_UpdateMap(year);
       plotPolls(year);
     }
     
