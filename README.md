@@ -10,6 +10,7 @@ The web application can be found at https://manorepo.github.io/USElectionTrends-
 
 Application uses the data from the folloing sources
 Election Resulsts:  [American Presidency Project](http://www.presidency.ucsb.edu/elections.php) 
+Exit Polls: NewYorkTimes and Edison Research
 
 
 
